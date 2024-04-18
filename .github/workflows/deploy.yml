@@ -14,11 +14,11 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      ACR_REGISTRY: ajaxclusterappacr.azurecr.io
-      BACKEND_IMAGE_NAME: backend
-      FRONTEND_IMAGE_NAME: frontend
-      BACKEND_APP_NAME: backend-app
-      FRONTEND_APP_NAME: frontend-app
+      ACR_REGISTRY: ajaxclusterappacrlokmanb15.azurecr.io
+      BACKEND_IMAGE_NAME: backend-b15-lok
+      FRONTEND_IMAGE_NAME: frontend-b15-lok
+      BACKEND_APP_NAME: backend-app-b15-lok
+      FRONTEND_APP_NAME: frontend-app-b15-lok
 
     steps:
       - name: Checkout code

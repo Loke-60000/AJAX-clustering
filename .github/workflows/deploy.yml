@@ -33,29 +33,49 @@ jobs:
         uses: azure/docker-login@v1
         with:
           login-server: ajaxclusteringlok.azurecr.io
-          username: ajaxclusteringlok.azurecr.io
+          username: kevb15registry
           password: ${{ secrets.ACR_PASSWORD }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pandas
+          pip install matplotlib
+          pip install scikit-learn
+          pip install pickle5
+
+      - name: Run tests
+        run: |
+          export PYTHONPATH=$PYTHONPATH:$(pwd)/backend
+          python -m unittest backend/api_test.py
 
       - name: Build and push backend Docker image
         working-directory: backend
         run: |
-          docker build . -t ajaxclusteringlok.azurecr.io/backend-b15-lok:${{ github.sha }}
-          docker push ajaxclusteringlok.azurecr.io/backend-b15-lok:${{ github.sha }}
+          docker build -t ajaxclusteringlok.azurecr.io/backend .
+          docker push ajaxclusteringlok.azurecr.io/backend
 
       - name: Build and push frontend Docker image
         working-directory: frontend
         run: |
-          docker build . -t ajaxclusteringlok.azurecr.io/frontend-b15-lok:${{ github.sha }}
-          docker push ajaxclusteringlok.azurecr.io/frontend-b15-lok:${{ github.sha }}
+          docker build -t ajaxclusteringlok.azurecr.io/frontend .
+          docker push ajaxclusteringlok.azurecr.io/frontend
 
-      - name: Deploy to Azure Web App - Backend
-        uses: azure/webapps-deploy@v2
+      - name: Find and Replace
+        uses: jacobtomlinson/gha-find-replace@v2
         with:
-          app-name: backend-app-b15-lok
-          images: ajaxclusteringlok.azurecr.io/backend-b15-lok:${{ github.sha }}
+          find: "password.registry"
+          replace: ${{ secrets.ACR_PASSWORD }}
+          regex: false
+          include: "deploy-aci.yaml"
 
-      - name: Deploy to Azure Web App - Frontend
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: frontend-app-b15-lok
-          images: ajaxclusteringlok.azurecr.io/frontend-b15-lok:${{ github.sha }}
+      - name: Delete Previous Same Container Instances
+        run: az container delete --resource-group kev_b16 --name kevContainerGroupB15 --yes
+
+      - name: Deploy to Azure Container Instances
+        run: az container create --resource-group kev_b16 --file deploy-aci.yaml

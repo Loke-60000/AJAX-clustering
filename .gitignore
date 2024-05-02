@@ -12,9 +12,6 @@ __pycache__/
 *.nbconvert.ipynb
 *.ipynb_checkpoints
 
-# csv
-*.csv
-
 # Docker
 .dockerignore
 

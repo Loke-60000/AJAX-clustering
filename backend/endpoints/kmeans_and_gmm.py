@@ -12,15 +12,13 @@ def income_kmeans_predict(n_clusters=5):
     df = pd.read_csv("data/Mall_Customers.csv")
     df.sample(10)
 
-    # k-means clustering based on annual income
     data = df.iloc[:, [3, 4]].values
 
     income_kmeans = KMeans(n_clusters, init="k-means++", random_state=0, n_init=10)
     y = income_kmeans.fit_predict(data)
-    mse = income_kmeans.inertia_  # inertia_ = to find the MSE value
+    mse = income_kmeans.inertia_
 
     df["Cluster"] = y
-    # plotting the clusters
     plt.subplots(figsize=(10, 6))
     plt.scatter(
         df["Annual Income (k$)"],
@@ -44,11 +42,9 @@ def income_kmeans_predict(n_clusters=5):
     plt.legend()
     plt.grid(True)
 
-    # Set the background color to transparent
     fig = plt.gcf()
     fig.patch.set_alpha(0)
 
-    # Convert plot to base64
     buffer = BytesIO()
     plt.savefig(buffer, format="png")
     buffer.seek(0)
@@ -67,12 +63,11 @@ def age_kmeans_predict(n_clusters=5):
     df = pd.read_csv("data/Mall_Customers.csv")
     df.sample(10)
 
-    # k-means clustering based on annual income
     data = df.iloc[:, [2, 4]].values
 
     age_kmeans = KMeans(n_clusters, init="k-means++", random_state=0)
     y = age_kmeans.fit_predict(data)
-    mse = age_kmeans.inertia_  # inertia_ = to find the MSE value
+    mse = age_kmeans.inertia_ 
 
     colors = [
         "Red",
@@ -95,7 +90,6 @@ def age_kmeans_predict(n_clusters=5):
         "Aquamarine",
     ]
 
-    # plotting the clusters
     plt.subplots(figsize=(10, 6))
     for i in range(0, n_clusters):
         plt.scatter(
@@ -115,11 +109,9 @@ def age_kmeans_predict(n_clusters=5):
     plt.legend()
     plt.grid(True)
 
-    # Set the background color to transparent
     fig = plt.gcf()
     fig.patch.set_alpha(0)
 
-    # Convert plot to base64
     buffer = BytesIO()
     plt.savefig(buffer, format="png")
     buffer.seek(0)
@@ -138,13 +130,12 @@ def income_gmm_predict(n_clusters=5):
     df = pd.read_csv("data/Mall_Customers.csv")
     df.sample(10)
 
-    # GMM clustering based on Annual Income¶
     data = df.iloc[:, [3, 4]].values
 
     income_gmm = GaussianMixture(n_components=n_clusters)
     y = income_gmm.fit_predict(data)
-    bic = income_gmm.bic(data)  # Stockage du BIC
-    aic = income_gmm.aic(data)  # Stockage de l'AIC
+    bic = income_gmm.bic(data) 
+    aic = income_gmm.aic(data)
 
     colors = [
         "Red",
@@ -167,7 +158,6 @@ def income_gmm_predict(n_clusters=5):
         "Aquamarine",
     ]
 
-    # plotting the clusters
     plt.subplots(figsize=(10, 6))
     for i in range(0, n_clusters):
         plt.scatter(
@@ -180,11 +170,9 @@ def income_gmm_predict(n_clusters=5):
     plt.legend()
     plt.grid(True)
 
-    # Set the background color to transparent
     fig = plt.gcf()
     fig.patch.set_alpha(0)
 
-    # Convert plot to base64
     buffer = BytesIO()
     plt.savefig(buffer, format="png")
     buffer.seek(0)
@@ -204,16 +192,14 @@ def age_gmm_predict(n_clusters=5):
     df = pd.read_csv("data/Mall_Customers.csv")
     df.sample(10)
 
-    # GMM clustering based on Annual Income¶
     data = df.iloc[:, [2, 4]].values
 
     age_gmm = GaussianMixture(n_components=n_clusters)
     y = age_gmm.fit_predict(data)
-    bic = age_gmm.bic(data)  # Stockage du BIC
-    aic = age_gmm.aic(data)  # Stockage de l'AIC
+    bic = age_gmm.bic(data)
+    aic = age_gmm.aic(data)
 
     df["Cluster"] = y
-    # plotting the clusters
     plt.subplots(figsize=(10, 6))
     plt.scatter(
         df["Age"],
@@ -230,11 +216,9 @@ def age_gmm_predict(n_clusters=5):
     plt.legend()
     plt.grid(True)
 
-    # Set the background color to transparent
     fig = plt.gcf()
     fig.patch.set_alpha(0)
 
-    # Convert plot to base64
     buffer = BytesIO()
     plt.savefig(buffer, format="png")
     buffer.seek(0)
